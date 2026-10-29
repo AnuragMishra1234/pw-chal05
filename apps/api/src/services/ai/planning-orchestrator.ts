@@ -16,15 +16,32 @@ import { BudgetEngine } from './budget-engine.js';
 import { TimelineEngine } from './timeline-engine.js';
 
 export class PlanningOrchestrator {
+  private static activeEventLocks = new Set<string>();
+
+  private acquireLock(eventId: string): () => void {
+    if (PlanningOrchestrator.activeEventLocks.has(eventId)) {
+      const error: any = new Error(`Plan generation or revision is currently in progress for event '${eventId}'. Please wait for the current operation to complete.`);
+      error.status = 409;
+      error.code = 'CONCURRENT_REQUEST_CONFLICT';
+      throw error;
+    }
+    PlanningOrchestrator.activeEventLocks.add(eventId);
+    return () => {
+      PlanningOrchestrator.activeEventLocks.delete(eventId);
+    };
+  }
+
   /**
    * Orchestrates full 11-stage generation pipeline from event details into a validated, versioned plan.
    */
   async generatePlan(eventId: string, options: GeneratePlanRequest = {}): Promise<Plan> {
-    // Stage 1: Load Event & Template
-    const event = await eventRepository.findById(eventId);
-    if (!event) {
-      throw new Error(`Event with ID '${eventId}' not found.`);
-    }
+    const releaseLock = this.acquireLock(eventId);
+    try {
+      // Stage 1: Load Event & Template
+      const event = await eventRepository.findById(eventId);
+      if (!event) {
+        throw new Error(`Event with ID '${eventId}' not found.`);
+      }
 
     const template = await templateService.getTemplateById(event.templateId);
 
@@ -116,24 +133,29 @@ export class PlanningOrchestrator {
     await this.syncBudget(eventId, event.currency, budgetResult);
 
     return savedPlan;
+  } finally {
+    releaseLock();
   }
+}
 
   /**
    * Revises an existing plan using natural-language instructions while preserving user data.
    */
   async revisePlan(eventId: string, options: RevisePlanRequest): Promise<Plan> {
-    const event = await eventRepository.findById(eventId);
-    if (!event) {
-      throw new Error(`Event with ID '${eventId}' not found.`);
-    }
+    const releaseLock = this.acquireLock(eventId);
+    try {
+      const event = await eventRepository.findById(eventId);
+      if (!event) {
+        throw new Error(`Event with ID '${eventId}' not found.`);
+      }
 
-    const currentPlan = options.planId
-      ? await planRepository.findById(options.planId)
-      : await planRepository.findLatestByEvent(eventId);
+      const currentPlan = options.planId
+        ? await planRepository.findById(options.planId)
+        : await planRepository.findLatestByEvent(eventId);
 
-    if (!currentPlan) {
-      throw new Error(`No active plan found for event '${eventId}' to revise.`);
-    }
+      if (!currentPlan) {
+        throw new Error(`No active plan found for event '${eventId}' to revise.`);
+      }
 
     const template = await templateService.getTemplateById(event.templateId);
 
@@ -218,7 +240,10 @@ export class PlanningOrchestrator {
     await this.syncBudget(eventId, event.currency, budgetResult);
 
     return savedPlan;
+  } finally {
+    releaseLock();
   }
+}
 
   /**
    * Safely cleans Markdown blocks and parses raw model output, verifying with Zod.

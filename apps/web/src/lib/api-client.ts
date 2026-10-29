@@ -35,7 +35,8 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     headers.set('Content-Type', 'application/json');
   }
   if (!headers.has('Authorization')) {
-    headers.set('Authorization', 'Bearer usr-organizer-default');
+    const customToken = typeof window !== 'undefined' ? localStorage.getItem('celebration_auth_token') : null;
+    headers.set('Authorization', `Bearer ${customToken || 'usr-organizer-default'}`);
   }
 
   try {

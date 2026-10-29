@@ -11,6 +11,7 @@ import {
 import { authenticate } from '../middleware/auth.middleware.js';
 import { requireEventAccess } from '../middleware/authorization.middleware.js';
 import { validateBody } from '../middleware/validation.middleware.js';
+import { aiGenerationRateLimiter } from '../middleware/rate-limiter.middleware.js';
 
 import {
   listEvents,
@@ -82,8 +83,8 @@ eventRouter.get('/:id/plans', requireEventAccess, listPlans);
 eventRouter.get('/:id/plans/latest', requireEventAccess, getLatestPlan);
 eventRouter.get('/:id/plans/:planId', requireEventAccess, getPlan);
 eventRouter.post('/:id/plans', requireEventAccess, createPlanVersion);
-eventRouter.post('/:id/plan/generate', requireEventAccess, validateBody(GeneratePlanRequestSchema), generatePlan);
-eventRouter.post('/:id/plans/generate', requireEventAccess, validateBody(GeneratePlanRequestSchema), generatePlan);
-eventRouter.post('/:id/plan/revise', requireEventAccess, validateBody(RevisePlanRequestSchema), revisePlan);
-eventRouter.post('/:id/plans/revise', requireEventAccess, validateBody(RevisePlanRequestSchema), revisePlan);
-eventRouter.post('/:id/plans/:planId/revise', requireEventAccess, validateBody(RevisePlanRequestSchema), revisePlan);
+eventRouter.post('/:id/plan/generate', requireEventAccess, aiGenerationRateLimiter, validateBody(GeneratePlanRequestSchema), generatePlan);
+eventRouter.post('/:id/plans/generate', requireEventAccess, aiGenerationRateLimiter, validateBody(GeneratePlanRequestSchema), generatePlan);
+eventRouter.post('/:id/plan/revise', requireEventAccess, aiGenerationRateLimiter, validateBody(RevisePlanRequestSchema), revisePlan);
+eventRouter.post('/:id/plans/revise', requireEventAccess, aiGenerationRateLimiter, validateBody(RevisePlanRequestSchema), revisePlan);
+eventRouter.post('/:id/plans/:planId/revise', requireEventAccess, aiGenerationRateLimiter, validateBody(RevisePlanRequestSchema), revisePlan);

@@ -8,12 +8,27 @@
 
 ## 1. General Conventions & Envelope Standards
 
-### 1.1 Request Headers
+### 1.1 Request Headers & Security Constraints
 - `Content-Type: application/json` (Required for `POST`, `PATCH`, `PUT`)
 - `Accept: application/json`
 - `Authorization: Bearer <jwt_or_session_token>` (Required for all protected routes)
+- `Payload Limit`: Enforced at 1MB (`express.json({ limit: '1mb' })`). Larger payloads return `413 Payload Too Large`.
 
-### 1.2 Response Envelope
+### 1.2 Automated Security Response Headers
+Every API response includes hardened HTTP headers:
+- `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;`
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Strict-Transport-Security: max-age=31536000; includeSubDomains`
+- `X-XSS-Protection: 0`
+- `Cross-Origin-Opener-Policy: same-origin`
+
+### 1.3 Rate Limiting Policy
+- **GenAI Planning Engine (`/plan/generate`, `/plans/generate`, `/plan/revise`, `/plans/revise`):** 5 requests per 60 seconds per client IP/user ID. Exceeding quota returns `429 Too Many Requests` with `Retry-After` header.
+- **General API Endpoints:** 100 requests per 60 seconds per client IP.
+
+### 1.4 Response Envelope
 All API responses adhere to a consistent JSON envelope structure:
 
 #### Success Response
@@ -46,15 +61,16 @@ All API responses adhere to a consistent JSON envelope structure:
 }
 ```
 
-### 1.3 Standard Error Codes
+### 1.5 Standard Error Codes
 - `BAD_REQUEST` (`400`): Malformed syntax or missing query parameters.
 - `VALIDATION_ERROR` (`400`): Payload failed Zod schema verification.
 - `UNAUTHORIZED` (`401`): Missing or expired authentication token.
-- `FORBIDDEN` (`403`): Caller does not have permission to access or modify this event.
+- `FORBIDDEN` (`403`): Caller does not have permission to access or modify this event (Strict multi-tenancy).
 - `RESOURCE_NOT_FOUND` (`404`): Event, task, or resource ID does not exist.
-- `RATE_LIMIT_EXCEEDED` (`429`): Too many requests, especially on AI generation routes.
+- `CONCURRENT_REQUEST_CONFLICT` (`409`): Simultaneous plan generation or revision is already in progress for the event.
+- `RATE_LIMIT_EXCEEDED` (`429`): Quota exceeded. Includes `retryAfterSeconds` in payload and `Retry-After` header.
 - `AI_PROVIDER_ERROR` (`502`): Downstream LLM provider failure or timeout.
-- `INTERNAL_SERVER_ERROR` (`500`): Unhandled exception in server logic.
+- `INTERNAL_SERVER_ERROR` (`500`): Unhandled exception in server logic (sanitized, no stack traces leaked).
 
 ---
 

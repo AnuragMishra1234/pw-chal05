@@ -30,7 +30,11 @@ export class AIProviderFactory {
       return new MockProviderAdapter();
     }
 
-    // Default to mock adapter
+    if (env.NODE_ENV === 'production' && !env.ALLOW_MOCK_IN_PRODUCTION) {
+      throw new Error('Mock AI provider cannot be used in production mode without explicit ALLOW_MOCK_IN_PRODUCTION=true.');
+    }
+
+    // Default to mock adapter for testing / dev
     return new MockProviderAdapter();
   }
 }

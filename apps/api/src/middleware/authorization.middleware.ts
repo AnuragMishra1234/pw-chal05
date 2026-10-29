@@ -38,11 +38,10 @@ export const requireEventAccess = async (req: Request, res: Response, next: Next
       });
     }
 
-    // Verify ownership (unless user is admin)
+    // Verify ownership (unless caller is admin)
     const currentUser = req.user;
     if (currentUser && currentUser.role !== 'admin') {
-      // In local dev, allow matching default user or exact ownerId
-      if (event.ownerId && event.ownerId !== currentUser.id && event.ownerId !== 'usr-organizer-default' && currentUser.id !== 'usr-organizer-default') {
+      if (event.ownerId && event.ownerId !== currentUser.id) {
         return res.status(403).json({
           success: false,
           error: {
