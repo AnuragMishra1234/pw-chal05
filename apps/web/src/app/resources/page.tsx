@@ -71,7 +71,7 @@ export default function ResourcesPage() {
         <div className="p-4 rounded-2xl bg-slate-100 border border-slate-200 text-xs text-slate-700 flex items-start gap-3">
           <Info className="w-4 h-4 text-slate-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold text-slate-900">Adaptive Resource Management (Phase 1 Preview)</p>
+            <p className="font-bold text-slate-900">Adaptive Resource Management</p>
             <p className="mt-0.5 leading-relaxed text-slate-600">
               In this architecture, resources are not siloed in a separate CRM; they adapt to the active event template. For example, opening a wedding surfaces guests and caterers, while opening a hackathon surfaces mentors and judges.
             </p>

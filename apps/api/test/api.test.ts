@@ -59,6 +59,7 @@ describe('Celebration & Event Planner — REST API Integration Tests', () => {
 
     const res = await request(app)
       .post('/api/v1/events')
+      .set('Authorization', 'Bearer user-test-organizer')
       .send(invalidPayload);
 
     assert.strictEqual(res.status, 400);
@@ -236,6 +237,47 @@ describe('Celebration & Event Planner — REST API Integration Tests', () => {
       .set('Authorization', 'Bearer user-test-organizer');
     assert.strictEqual(listRes.status, 200);
     assert.ok(listRes.body.data.find((e: any) => e.id === createdExpenseId));
+  });
+
+  test('DELETE /api/v1/events/:id/expenses/:expenseId deletes an expense and updates budget', async () => {
+    const res = await request(app)
+      .delete(`/api/v1/events/${createdEventId}/expenses/${createdExpenseId}`)
+      .set('Authorization', 'Bearer user-test-organizer');
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.deleted, true);
+
+    // Verify expense is no longer present
+    const listRes = await request(app)
+      .get(`/api/v1/events/${createdEventId}/expenses`)
+      .set('Authorization', 'Bearer user-test-organizer');
+    assert.strictEqual(listRes.status, 200);
+    assert.strictEqual(listRes.body.data.find((e: any) => e.id === createdExpenseId), undefined);
+  });
+
+  test('DELETE /api/v1/events/:id/tasks/:taskId deletes a task', async () => {
+    const res = await request(app)
+      .delete(`/api/v1/events/${createdEventId}/tasks/${createdTaskId}`)
+      .set('Authorization', 'Bearer user-test-organizer');
+
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.deleted, true);
+
+    // Verify task is no longer present
+    const listRes = await request(app)
+      .get(`/api/v1/events/${createdEventId}/tasks`)
+      .set('Authorization', 'Bearer user-test-organizer');
+    assert.strictEqual(listRes.status, 200);
+    assert.strictEqual(listRes.body.data.find((t: any) => t.id === createdTaskId), undefined);
+  });
+
+  test('Protected routes reject requests without Authorization header with 401', async () => {
+    const res = await request(app).get(`/api/v1/events/${createdEventId}`);
+    assert.strictEqual(res.status, 401);
+    assert.strictEqual(res.body.success, false);
+    assert.strictEqual(res.body.error.code, 'UNAUTHORIZED');
   });
 
   test('POST /api/v1/events/:id/plans creates a versioned plan & GET latest retrieves it', async () => {

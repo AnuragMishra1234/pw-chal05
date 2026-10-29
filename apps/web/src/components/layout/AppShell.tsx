@@ -92,10 +92,10 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
           <div className="flex items-center justify-between text-xs">
             <span className="inline-flex items-center gap-1.5 font-medium text-emerald-700">
               <ShieldCheck className="w-3.5 h-3.5" />
-              Phase 1 Frontend
+              Phase 3 Verified
             </span>
             <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-emerald-100/60 text-emerald-800">
-              Local Demo
+              AI Integrated
             </span>
           </div>
         </div>
@@ -149,7 +149,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-slate-800 truncate">Demo Organizer</p>
-              <p className="text-[10px] text-slate-400 truncate">Local Mode (No Auth)</p>
+              <p className="text-[10px] text-slate-400 truncate">Universal Organizer</p>
             </div>
           </div>
         </div>

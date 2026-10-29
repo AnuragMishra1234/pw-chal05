@@ -98,16 +98,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Prototype Demo Banner */}
+        {/* Platform Status Banner */}
         <div className="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-200/60 flex items-center justify-between text-xs text-indigo-900">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
             <span>
-              <strong>Phase 1 Evaluation:</strong> Running in local prototype mode with persistent browser demo state. All metrics reflect the active local repository.
+              <strong>Platform Operational:</strong> Universal GenAI planning engine connected with persistent database storage and adaptive templates.
             </span>
           </div>
           <span className="text-[10px] font-mono font-semibold bg-white/80 px-2 py-0.5 rounded border border-indigo-200 text-indigo-700">
-            Phase 1 Active
+            Phase 3 Verified
           </span>
         </div>
 

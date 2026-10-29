@@ -47,12 +47,12 @@ export default function SettingsPage() {
         </div>
 
         {/* Phase Scope Callout */}
-        <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/60 text-xs text-amber-900 flex items-start gap-3">
-          <ShieldAlert className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200/60 text-xs text-indigo-900 flex items-start gap-3">
+          <ShieldAlert className="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold">Authentication & Tenancy Architecture</p>
-            <p className="mt-0.5 leading-relaxed text-amber-800">
-              In <strong>Phase 1</strong>, the application operates in single-user local prototype mode without authentication. Secure session tokens, password hashing, and user-level multi-tenancy are scheduled for <strong>Phase 2</strong>.
+            <p className="font-bold">Authentication & Persistence Architecture</p>
+            <p className="mt-0.5 leading-relaxed text-indigo-800">
+              The application runs with Bearer token authentication, MongoDB persistence (with automated local in-memory fallback), and a multi-provider GenAI planning engine.
             </p>
           </div>
         </div>

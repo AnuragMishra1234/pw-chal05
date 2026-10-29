@@ -17,8 +17,7 @@ declare global {
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
-  // In production, require standard Bearer token
-  if (process.env.NODE_ENV === 'production' && !authHeader) {
+  if (!authHeader) {
     return res.status(401).json({
       success: false,
       error: {
@@ -34,13 +33,16 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   let email = 'organizer@celebration.app';
   let role: 'organizer' | 'admin' = 'organizer';
 
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  if (authHeader.startsWith('Bearer ')) {
     const token = authHeader.substring(7).trim();
     if (token === 'admin-token') {
       role = 'admin';
       userId = 'usr-admin-01';
       email = 'admin@celebration.app';
     } else if (token.startsWith('user-')) {
+      userId = token;
+      email = `${token}@celebration.app`;
+    } else if (token) {
       userId = token;
       email = `${token}@celebration.app`;
     }

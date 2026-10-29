@@ -10,13 +10,16 @@ describe('Phase 3 — GenAI Planning Engine & Adaptive Templates Tests', () => {
   const app = createApp();
   let weddingEventId: string;
   let hackathonEventId: string;
+  let birthdayEventId: string;
+  let communityEventId: string;
+  let conferenceEventId: string;
   let customEventId: string;
   let generatedPlanId: string;
 
   before(async () => {
     await database.connect();
 
-    // Seed test events
+    // Seed test events for all canonical templates
     const weddingRes = await request(app)
       .post('/api/v1/events')
       .set('Authorization', 'Bearer user-ai-tester')
@@ -46,6 +49,51 @@ describe('Phase 3 — GenAI Planning Engine & Adaptive Templates Tests', () => {
         location: { type: 'physical', city: 'Bengaluru', country: 'India' }
       });
     hackathonEventId = hackathonRes.body.data.id;
+
+    const birthdayRes = await request(app)
+      .post('/api/v1/events')
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send({
+        title: "Aarav's 18th Milestone Birthday Bash",
+        eventType: 'birthday',
+        templateId: 'birthday',
+        startDate: '2027-06-15T18:00:00.000Z',
+        currency: 'INR',
+        budgetLimitMinorUnits: 25000000, // ₹2,50,000
+        expectedAttendance: 75,
+        location: { type: 'physical', city: 'Mumbai', country: 'India' }
+      });
+    birthdayEventId = birthdayRes.body.data.id;
+
+    const communityRes = await request(app)
+      .post('/api/v1/events')
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send({
+        title: 'Clean River Green City Civic Drive',
+        eventType: 'community_event',
+        templateId: 'community_event',
+        startDate: '2027-03-22T07:00:00.000Z',
+        currency: 'INR',
+        budgetLimitMinorUnits: 15000000, // ₹1,50,000
+        expectedAttendance: 150,
+        location: { type: 'physical', city: 'Pune', country: 'India' }
+      });
+    communityEventId = communityRes.body.data.id;
+
+    const conferenceRes = await request(app)
+      .post('/api/v1/events')
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send({
+        title: 'Global Cloud & AI Summit 2027',
+        eventType: 'corporate_conference',
+        templateId: 'corporate_conference',
+        startDate: '2027-09-18T08:30:00.000Z',
+        currency: 'INR',
+        budgetLimitMinorUnits: 200000000, // ₹20,00,000
+        expectedAttendance: 350,
+        location: { type: 'hybrid', city: 'Hyderabad', country: 'India' }
+      });
+    conferenceEventId = conferenceRes.body.data.id;
 
     const customRes = await request(app)
       .post('/api/v1/events')
@@ -149,6 +197,58 @@ describe('Phase 3 — GenAI Planning Engine & Adaptive Templates Tests', () => {
     assert.strictEqual(res.body.success, true);
     assert.strictEqual(res.body.data.version, 1);
     assert.ok(res.body.data.summary.includes('Midnight Stargazing') || res.body.data.summary.includes('Tailored'));
+  });
+
+  // 5b. Plan Generation for Birthday & Milestone
+  test('POST /api/v1/events/:id/plan/generate produces birthday-specific structured plan', async () => {
+    const res = await request(app)
+      .post(`/api/v1/events/${birthdayEventId}/plan/generate`)
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send();
+
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.version, 1);
+    assert.ok(res.body.data.summary.includes('birthday') || res.body.data.summary.includes('Birthday'));
+    assert.ok(res.body.data.templateSpecificModules.gameActivities || res.body.data.tasks.length > 0);
+  });
+
+  // 5c. Plan Generation for Community Initiative
+  test('POST /api/v1/events/:id/plan/generate produces community-specific structured plan with safety protocols', async () => {
+    const res = await request(app)
+      .post(`/api/v1/events/${communityEventId}/plan/generate`)
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send();
+
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.version, 1);
+    assert.ok(res.body.data.templateSpecificModules.safetyProtocols || res.body.data.templateSpecificModules.impactTargets);
+  });
+
+  // 5d. Plan Generation for Corporate Conference
+  test('POST /api/v1/events/:id/plan/generate produces conference-specific structured plan with speakers and sponsors', async () => {
+    const res = await request(app)
+      .post(`/api/v1/events/${conferenceEventId}/plan/generate`)
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send();
+
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.version, 1);
+    assert.ok(res.body.data.templateSpecificModules.speakerList || res.body.data.templateSpecificModules.sponsorTiers);
+  });
+
+  // 5e. Plural endpoint alias test: POST /api/v1/events/:id/plans/generate
+  test('POST /api/v1/events/:id/plans/generate (plural alias) correctly generates structured plan', async () => {
+    const res = await request(app)
+      .post(`/api/v1/events/${conferenceEventId}/plans/generate`)
+      .set('Authorization', 'Bearer user-ai-tester')
+      .send();
+
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.version, 2);
   });
 
   // 6. Conversational Plan Revision
