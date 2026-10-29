@@ -1,0 +1,125 @@
+{
+  "id": "custom",
+  "version": "1.0.0",
+  "name": "Custom Event",
+  "category": "custom",
+  "description": "Plan any unique, hybrid, or composite event using an open-ended natural language brief.",
+  "icon": "Sparkles",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "endDate",
+    "customPrompt",
+    "preferences.eventObjective",
+    "preferences.specialRequirements",
+    "preferences.targetVibe"
+  ],
+  "customFields": [
+    {
+      "name": "customPrompt",
+      "label": "Detailed Event Vision & Concept",
+      "type": "text",
+      "required": false,
+      "helperText": "Describe the unique atmosphere, special arrangements, or bespoke requirements for this event."
+    },
+    {
+      "name": "eventObjective",
+      "label": "Primary Objective / Success Metric",
+      "type": "text",
+      "required": false,
+      "defaultValue": "Deliver an unforgettable experience for all participants",
+      "helperText": "What defines a successful outcome for this gathering?"
+    },
+    {
+      "name": "targetVibe",
+      "label": "Desired Ambiance & Tone",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "Vibrant & High Energy", "value": "high_energy" },
+        { "label": "Elegant & Refined", "value": "elegant" },
+        { "label": "Casual & Warm", "value": "casual" },
+        { "label": "Focused & Professional", "value": "professional" },
+        { "label": "Immersive & Artistic", "value": "artistic" }
+      ],
+      "defaultValue": "casual"
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports"
+  ],
+  "taskCategories": [
+    "Concept & Scoping",
+    "Venue & Infrastructure",
+    "Budget & Procurement",
+    "Attendee Experience",
+    "Operations & Day-Of Execution",
+    "Post-Event Wrap-up"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Finalize Event Concept & Core Experience Pillars",
+      "category": "Concept & Scoping",
+      "daysBeforeEvent": 60,
+      "priority": "critical"
+    },
+    {
+      "title": "Secure Venue or Space Permits",
+      "category": "Venue & Infrastructure",
+      "daysBeforeEvent": 45,
+      "priority": "high"
+    },
+    {
+      "title": "Draft Initial Budget Allocation & Supplier Inquiries",
+      "category": "Budget & Procurement",
+      "daysBeforeEvent": 30,
+      "priority": "high"
+    },
+    {
+      "title": "Send Invitations & Confirm Participant Roster",
+      "category": "Attendee Experience",
+      "daysBeforeEvent": 20,
+      "priority": "medium"
+    },
+    {
+      "title": "Run Operational Equipment & Staff Check",
+      "category": "Operations & Day-Of Execution",
+      "daysBeforeEvent": 3,
+      "priority": "high"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 60,
+    "budgetAllocationGuidance": {
+      "Venue & Staging": 35,
+      "Food, Drinks & Hospitality": 30,
+      "Experience & Production": 20,
+      "Marketing & Materials": 5,
+      "Contingency Reserve": 10
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "id": "birthday",
+  "version": "1.0.0",
+  "name": "Birthday & Private Celebration",
+  "category": "personal_celebration",
+  "description": "Tailored milestone birthdays, surprise gatherings, and private social events.",
+  "icon": "Cake",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "preferences.milestoneAge",
+    "preferences.isSurpriseParty",
+    "preferences.themePreference",
+    "preferences.entertainmentType"
+  ],
+  "customFields": [
+    {
+      "name": "milestoneAge",
+      "label": "Celebrant Age / Milestone",
+      "type": "number",
+      "required": false,
+      "helperText": "e.g. 1st, 18th, 21st, 30th, 50th, 80th"
+    },
+    {
+      "name": "isSurpriseParty",
+      "label": "Is this a Surprise Party?",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": false,
+      "helperText": "Adds secret guest coordination and arrival timing tasks."
+    },
+    {
+      "name": "entertainmentType",
+      "label": "Primary Entertainment",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "DJ & Dancing", "value": "dj_dancing" },
+        { "label": "Live Band / Acoustic", "value": "live_music" },
+        { "label": "Interactive Games & Host", "value": "games_host" },
+        { "label": "Children Entertainer / Magician", "value": "entertainer" },
+        { "label": "Casual Social Gathering", "value": "casual" }
+      ],
+      "defaultValue": "casual"
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports",
+    "guests",
+    "catering"
+  ],
+  "taskCategories": [
+    "Venue & Atmosphere",
+    "Cake & Refreshments",
+    "Invitations & RSVP",
+    "Music & Entertainment",
+    "Party Favors & Keepsakes",
+    "Photography & Highlights"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Select Party Theme & Color Scheme",
+      "category": "Venue & Atmosphere",
+      "daysBeforeEvent": 60,
+      "priority": "medium"
+    },
+    {
+      "title": "Book Venue or Reserve Private Dining Area",
+      "category": "Venue & Atmosphere",
+      "daysBeforeEvent": 45,
+      "priority": "high"
+    },
+    {
+      "title": "Send Digital or Printed Invitations",
+      "category": "Invitations & RSVP",
+      "daysBeforeEvent": 30,
+      "priority": "high"
+    },
+    {
+      "title": "Order Custom Birthday Cake & Bakery Items",
+      "category": "Cake & Refreshments",
+      "daysBeforeEvent": 14,
+      "priority": "high"
+    },
+    {
+      "title": "Assemble Party Playlist or Confirm DJ Schedule",
+      "category": "Music & Entertainment",
+      "daysBeforeEvent": 7,
+      "priority": "medium"
+    },
+    {
+      "title": "Decorate Venue & Setup Guest Photo Wall",
+      "category": "Venue & Atmosphere",
+      "daysBeforeEvent": 0,
+      "priority": "high"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 60,
+    "budgetAllocationGuidance": {
+      "Food & Beverages": 40,
+      "Venue Rental": 20,
+      "Cake & Desserts": 10,
+      "Decorations & Theme": 12,
+      "Entertainment / DJ": 12,
+      "Contingency Reserve": 6
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}

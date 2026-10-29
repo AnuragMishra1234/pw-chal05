@@ -1,0 +1,135 @@
+{
+  "id": "community_event",
+  "version": "1.0.0",
+  "name": "Community & Social Initiative",
+  "category": "civic_initiative",
+  "description": "Civic drives, charity fundraisers, environmental cleanups, and local neighborhood assemblies.",
+  "icon": "Users",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "preferences.initiativeFocus",
+    "preferences.requiresMunicipalPermit",
+    "preferences.volunteerTargetCount",
+    "preferences.donationGoalMinorUnits"
+  ],
+  "customFields": [
+    {
+      "name": "initiativeFocus",
+      "label": "Initiative Category",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "Environmental Cleanup / Tree Planting", "value": "environmental" },
+        { "label": "Food Drive / Poverty Relief", "value": "food_relief" },
+        { "label": "Neighborhood Festival / Cultural Block Party", "value": "block_party" },
+        { "label": "Civic Townhall / Public Forum", "value": "townhall" },
+        { "label": "Charity 5K Walk/Run", "value": "charity_run" }
+      ],
+      "defaultValue": "environmental"
+    },
+    {
+      "name": "requiresMunicipalPermit",
+      "label": "Requires City/Park Permitting?",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": true,
+      "helperText": "Triggers municipal permit filing and noise waiver checkpoints."
+    },
+    {
+      "name": "volunteerTargetCount",
+      "label": "Target Number of Volunteers",
+      "type": "number",
+      "required": false,
+      "defaultValue": 50
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports",
+    "volunteers",
+    "outreach",
+    "equipment",
+    "impact_tracking"
+  ],
+  "taskCategories": [
+    "Permits & City Relations",
+    "Volunteer Mobilization",
+    "Safety & Medical Support",
+    "Logistics & Equipment",
+    "Community Outreach & Media",
+    "Waste Disposal & Environmental Impact"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Submit Public Space & Sound Permit to City Hall",
+      "category": "Permits & City Relations",
+      "daysBeforeEvent": 60,
+      "priority": "critical"
+    },
+    {
+      "title": "Launch Volunteer Recruitment Registration Drive",
+      "category": "Volunteer Mobilization",
+      "daysBeforeEvent": 45,
+      "priority": "high"
+    },
+    {
+      "title": "Procure Safety Equipment, First Aid Kits & Hi-Vis Vests",
+      "category": "Safety & Medical Support",
+      "daysBeforeEvent": 20,
+      "priority": "high"
+    },
+    {
+      "title": "Arrange Waste Dumpsters & Recycling Hauler",
+      "category": "Waste Disposal & Environmental Impact",
+      "daysBeforeEvent": 14,
+      "priority": "critical"
+    },
+    {
+      "title": "Send Press Advisory to Local News Outlets & Community Groups",
+      "category": "Community Outreach & Media",
+      "daysBeforeEvent": 10,
+      "priority": "medium"
+    },
+    {
+      "title": "Conduct Morning Safety Briefing & Route Deployment",
+      "category": "Safety & Medical Support",
+      "daysBeforeEvent": 0,
+      "priority": "critical"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 60,
+    "budgetAllocationGuidance": {
+      "Safety Gear & First Aid": 30,
+      "Volunteer Hydration & Refreshments": 25,
+      "Waste Hauling & Environmental Disposal": 20,
+      "Signage, Banners & Outreach": 10,
+      "City Permit Fees": 5,
+      "Contingency Reserve": 10
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}

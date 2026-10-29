@@ -1,0 +1,145 @@
+{
+  "id": "college_hackathon",
+  "version": "1.0.0",
+  "name": "College Hackathon",
+  "category": "academic_competition",
+  "description": "24-48 hour student innovation sprints, mentor matchmaking, and project judging.",
+  "icon": "Laptop",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "endDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "preferences.durationHours",
+    "preferences.focusDomains",
+    "preferences.prizePoolMinorUnits",
+    "preferences.hardwareLabNeeded"
+  ],
+  "customFields": [
+    {
+      "name": "durationHours",
+      "label": "Hackathon Duration (Hours)",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "24 Hours (Overnight)", "value": "24" },
+        { "label": "36 Hours (Weekend)", "value": "36" },
+        { "label": "48 Hours (Full Scale)", "value": "48" },
+        { "label": "12 Hours (Single Day Sprint)", "value": "12" }
+      ],
+      "defaultValue": "36"
+    },
+    {
+      "name": "hardwareLabNeeded",
+      "label": "Hardware / IoT Lab Required?",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": false,
+      "helperText": "Adds hardware bench reservation, soldering station safety, and parts checkout tasks."
+    },
+    {
+      "name": "focusDomains",
+      "label": "Focus Domains / Problem Tracks",
+      "type": "text",
+      "required": false,
+      "defaultValue": "AI/ML, Healthcare, Web3/Fintech, Sustainability",
+      "helperText": "Comma-separated track topics."
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports",
+    "registrations",
+    "teams",
+    "judges",
+    "sessions",
+    "sponsors",
+    "equipment"
+  ],
+  "taskCategories": [
+    "Sponsorship & Grants",
+    "Venue & Infrastructure",
+    "Participant Registration",
+    "Judges & Mentors",
+    "Catering & Midnight Fuel",
+    "Prizes & Swag",
+    "Safety & Overnight Security"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Secure Campus Innovation Hall & Overnight Permission",
+      "category": "Venue & Infrastructure",
+      "daysBeforeEvent": 90,
+      "priority": "critical"
+    },
+    {
+      "title": "Publish Sponsorship Prospectus to Tech Companies",
+      "category": "Sponsorship & Grants",
+      "daysBeforeEvent": 75,
+      "priority": "high"
+    },
+    {
+      "title": "Deploy Participant Registration Portal",
+      "category": "Participant Registration",
+      "daysBeforeEvent": 60,
+      "priority": "high"
+    },
+    {
+      "title": "Confirm Industry Judges & Scoring Rubric",
+      "category": "Judges & Mentors",
+      "daysBeforeEvent": 30,
+      "priority": "high"
+    },
+    {
+      "title": "Verify Gigabit Wi-Fi Capacity & Power Drop Drops",
+      "category": "Venue & Infrastructure",
+      "daysBeforeEvent": 14,
+      "priority": "critical"
+    },
+    {
+      "title": "Order Participant T-Shirts, Badges, and Swag Packs",
+      "category": "Prizes & Swag",
+      "daysBeforeEvent": 20,
+      "priority": "medium"
+    },
+    {
+      "title": "Coordinate 24h Meal Schedule & Energy Drinks",
+      "category": "Catering & Midnight Fuel",
+      "daysBeforeEvent": 10,
+      "priority": "high"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 90,
+    "budgetAllocationGuidance": {
+      "Food & 24h Catering": 35,
+      "Cash Prizes & Grants": 25,
+      "Swag & Merchandise": 15,
+      "Venue & High-Speed AV/Network": 10,
+      "Marketing & Signage": 5,
+      "Contingency Reserve": 10
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}

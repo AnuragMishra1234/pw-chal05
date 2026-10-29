@@ -1,0 +1,142 @@
+{
+  "id": "corporate_conference",
+  "version": "1.0.0",
+  "name": "Corporate Conference & Summit",
+  "category": "professional_summit",
+  "description": "Multi-track industry summits, keynote sessions, sponsor expo halls, and executive banquets.",
+  "icon": "Briefcase",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "endDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "preferences.trackCount",
+    "preferences.keynoteSpeakerTarget",
+    "preferences.sponsorshipRevenueTargetMinorUnits",
+    "preferences.hasExhibitionHall"
+  ],
+  "customFields": [
+    {
+      "name": "trackCount",
+      "label": "Number of Parallel Presentation Tracks",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "Single Track (Plenary)", "value": "1" },
+        { "label": "2 Parallel Tracks", "value": "2" },
+        { "label": "3-4 Breakout Tracks", "value": "4" },
+        { "label": "5+ Multi-Track Summit", "value": "5" }
+      ],
+      "defaultValue": "2"
+    },
+    {
+      "name": "hasExhibitionHall",
+      "label": "Sponsor Exhibition Expo Hall?",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": true,
+      "helperText": "Adds booth layout mapping, exhibitor kit distribution, and electrician services."
+    },
+    {
+      "name": "keynoteSpeakerTarget",
+      "label": "Target Keynote / Featured Speakers",
+      "type": "number",
+      "required": false,
+      "defaultValue": 4
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports",
+    "speakers",
+    "sessions",
+    "sponsors",
+    "equipment"
+  ],
+  "taskCategories": [
+    "Venue & Breakout Rooms",
+    "Speakers & Agenda",
+    "Sponsorship & Exhibit Hall",
+    "Audio-Visual & Live Streaming",
+    "Badges & Attendee Check-In",
+    "Executive Catering & Receptions",
+    "PR, Brand & Media"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Contract Convention Center or Hotel Ballroom",
+      "category": "Venue & Breakout Rooms",
+      "daysBeforeEvent": 180,
+      "priority": "critical"
+    },
+    {
+      "title": "Open Call for Speaker Proposals (CFP)",
+      "category": "Speakers & Agenda",
+      "daysBeforeEvent": 150,
+      "priority": "high"
+    },
+    {
+      "title": "Launch Sponsor Package Prospectus (Gold/Silver/Bronze)",
+      "category": "Sponsorship & Exhibit Hall",
+      "daysBeforeEvent": 120,
+      "priority": "high"
+    },
+    {
+      "title": "Confirm Keynote Speaker Travel & Honorariums",
+      "category": "Speakers & Agenda",
+      "daysBeforeEvent": 60,
+      "priority": "high"
+    },
+    {
+      "title": "Finalize AV Contract (Stage Lighting, Mics, Multi-Cam Streaming)",
+      "category": "Audio-Visual & Live Streaming",
+      "daysBeforeEvent": 45,
+      "priority": "critical"
+    },
+    {
+      "title": "Print Attendee Lanyards, Badges, and Schedule Guides",
+      "category": "Badges & Attendee Check-In",
+      "daysBeforeEvent": 14,
+      "priority": "high"
+    },
+    {
+      "title": "Conduct Stage Audio Check & Presenter Slides Rehearsal",
+      "category": "Audio-Visual & Live Streaming",
+      "daysBeforeEvent": 1,
+      "priority": "critical"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 180,
+    "budgetAllocationGuidance": {
+      "Convention Venue & Breakout Facilities": 35,
+      "Attendee Catering, Breaks & Executive Dinner": 25,
+      "AV, Lighting & Live Streaming Production": 18,
+      "Keynote Honorariums & VIP Hospitality": 10,
+      "Signage, Badges & Conference App": 5,
+      "Contingency Reserve": 7
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}

@@ -1,0 +1,726 @@
+CELEBRATION & EVENT PLANNER
+COMPLETE PROJECT SPECIFICATION
+Version 1.0 | Phase-Based Implementation Blueprint
+
+============================================================
+1. PROJECT SUMMARY
+============================================================
+
+Project name:
+Celebration & Event Planner
+
+Project type:
+Universal GenAI-powered event planning and management web application.
+
+One-line description:
+A smart event-planning assistant that turns a user's event requirements into a personalized, budget-aware, editable plan with a timeline, tasks, resources, and recommendations.
+
+Problem being solved:
+Planning events requires people to coordinate budgets, schedules, vendors, participants, resources, and many small tasks. Existing approaches often require separate documents, spreadsheets, checklists, and websites. Generic templates do not always account for the specific event, constraints, budget, or preferences. The proposed system combines AI-generated recommendations with deterministic application logic and an interactive dashboard so users can create, manage, and adapt event plans in one place.
+
+Core product principle:
+ONE universal dashboard + ONE shared planning engine + configurable event-specific templates.
+Do not build a separate application or duplicate dashboard for every event type.
+
+Intended users:
+- Individuals and families
+- College and student organizers
+- Community organizers and volunteer groups
+- Small organizations and professional event organizers
+
+Initial event coverage:
+- Weddings and anniversaries
+- Birthdays and private celebrations
+- College events and hackathons
+- Community and social events
+- Corporate events and conferences
+- Custom events described in natural language
+
+The application should support additional event types through versioned templates and reusable modules, rather than major architectural rewrites.
+
+============================================================
+2. GOALS AND SUCCESS CRITERIA
+============================================================
+
+Primary goals:
+1. Turn a small set of user inputs into a useful event plan.
+2. Generate relevant plans based on event category and user context.
+3. Suggest budget allocations and identify budget overruns.
+4. Generate preparation timelines, milestones, tasks, and checklists.
+5. Recommend themes, activities, menus, and arrangements where relevant.
+6. Allow users to edit plans and regenerate selected sections.
+7. Save plans and display them in a clear, usable dashboard.
+8. Validate AI output and use ordinary code for calculations and constraints.
+9. Demonstrate reliability, security, efficiency, testing, accessibility, and maintainable code.
+
+MVP acceptance criteria:
+- A user can create an event with title, event type, date, location, currency, budget, expected attendance, duration, and preferences.
+- The system offers at least five initial event templates and a custom-event path.
+- The system generates structured AI output for an event.
+- The output includes an overview, budget proposal, tasks, timeline, and relevant event-specific modules.
+- Backend validation prevents malformed AI output from being blindly saved.
+- Budget totals are calculated by application code and discrepancies are flagged.
+- Users can view, edit, complete, and track tasks.
+- Users can update event details and request a plan revision.
+- The dashboard only displays specialized modules relevant to the selected event.
+- Core data persists in MongoDB and remains available after refresh.
+- API keys are not exposed to the browser or committed to source control.
+- Essential user flows have automated tests.
+- The application can be deployed using documented instructions.
+
+Do not claim that a feature is implemented until it exists and has been tested. Keep planned features clearly separated from completed features.
+
+============================================================
+3. FOUR IMPLEMENTATION PHASES
+============================================================
+
+Implement the project in exactly four major phases. Each phase must leave the repository in a runnable, understandable state. Before changing files, inspect the existing repository, identify the current stack and conventions, and preserve working code. Do not overwrite or recreate the project blindly.
+
+PHASE 1 — FOUNDATION, UI SHELL, AND EVENT MODEL
+
+Purpose:
+Create the project foundation and a polished, navigable frontend with a clear event model and template-driven structure.
+
+Expected work:
+- Inspect repository and document the existing state before modifying it.
+- Establish or verify the frontend/backend project structure.
+- Build a consistent responsive application shell and navigation.
+- Build the home dashboard, My Events page, Create Event wizard, and event details/planning workspace shell.
+- Create a reusable event type/template registry.
+- Define shared TypeScript types and validation schemas.
+- Define the common event model and template configuration model.
+- Create representative template configurations for wedding, birthday, college hackathon, community event, and corporate conference.
+- Add a Custom Event option that accepts a natural-language description.
+- Use realistic demo/mock data only where backend persistence is not yet implemented; label it clearly and keep it easy to replace.
+- Include loading, empty, error, and success states.
+- Ensure keyboard accessibility, sensible labels, focus states, responsive layout, and readable contrast.
+- Set up linting, formatting, and basic tests if not already configured.
+- Create `.env.example` with placeholder variable names only; never include real credentials.
+
+Phase 1 deliverables:
+- Runnable application shell.
+- Navigable and responsive pages.
+- Reusable UI components.
+- Versioned template configuration structure.
+- Shared data types and validation schemas.
+- Basic automated tests and clear run instructions.
+
+Phase 1 acceptance:
+- Application starts using documented commands.
+- All navigation routes work.
+- Event creation form validates required fields.
+- Template selection changes relevant fields/modules.
+- The custom-event path is available.
+- No critical console errors or broken routes.
+- No secrets are present in the repository.
+
+PHASE 2 — BACKEND, DATABASE, AND EVENT MANAGEMENT
+
+Purpose:
+Implement persistent data and reliable APIs before adding the complete AI workflow.
+
+Expected work:
+- Build or verify a Node.js + Express + TypeScript backend.
+- Connect MongoDB using environment configuration.
+- Organize code into route/controller/service/repository/validation layers or a similarly clear modular structure.
+- Implement event CRUD and event listing.
+- Implement template retrieval and validation.
+- Implement task CRUD and status updates.
+- Implement budget persistence and expense tracking basics.
+- Implement plan persistence with versioning fields.
+- Add authentication and event-level authorization if time and project scope permit; never leave protected data accessible to arbitrary users. If authentication is deferred, clearly mark the prototype as single-user/demo-only and do not expose it as secure multi-user production software.
+- Validate every API request on the server.
+- Add consistent error responses, request logging, timeouts where appropriate, and basic rate limiting.
+- Add database indexes for common access patterns.
+- Add tests for successful operations, invalid inputs, missing records, and unauthorized access.
+- Keep backend secrets server-side.
+
+Core API paths (adapt consistently if the existing codebase uses another convention):
+- GET /api/v1/health
+- GET /api/v1/templates
+- GET /api/v1/events
+- POST /api/v1/events
+- GET /api/v1/events/:eventId
+- PATCH /api/v1/events/:eventId
+- DELETE /api/v1/events/:eventId (prefer archive/soft-delete where appropriate)
+- GET /api/v1/events/:eventId/tasks
+- POST /api/v1/events/:eventId/tasks
+- PATCH /api/v1/events/:eventId/tasks/:taskId
+- GET /api/v1/events/:eventId/budget
+- PATCH /api/v1/events/:eventId/budget
+- POST /api/v1/events/:eventId/expenses
+- GET /api/v1/events/:eventId/plans
+
+Phase 2 deliverables:
+- Working backend and database connection.
+- Persistent events, tasks, budgets, expenses, and plans.
+- API documentation or an updated README.
+- Automated API and validation tests.
+- Frontend connected to real APIs for completed modules.
+
+Phase 2 acceptance:
+- Data persists across reloads and backend restarts.
+- Invalid data is rejected by the server.
+- API errors are understandable and consistent.
+- IDs and ownership/access checks are applied wherever applicable.
+- No secret values are logged or returned.
+- Existing Phase 1 functionality remains operational.
+
+PHASE 3 — GENAI PLANNING ENGINE AND ADAPTIVE EVENT TEMPLATES
+
+Purpose:
+Implement the core intelligence that generates event-specific plans while keeping calculations and validation deterministic.
+
+Expected work:
+- Integrate one actual LLM provider selected for the project, such as Gemini or Groq. Do not claim multiple providers unless they are implemented.
+- Use a provider adapter so provider-specific code does not leak into domain logic.
+- Read the API key only from server-side environment variables.
+- Implement a planning orchestrator with clear stages:
+  1. Load event and template.
+  2. Normalize inputs and identify missing required fields.
+  3. Build a constrained prompt using the event context and template.
+  4. Request structured output.
+  5. Parse and validate output using a schema.
+  6. Check business rules and deterministic calculations.
+  7. Retry/repair invalid output a bounded number of times.
+  8. Save a new plan version only after validation.
+  9. Return a normalized response to the frontend.
+- Define a strict structured output schema for:
+  - Event summary and assumptions
+  - Budget categories and estimated amounts
+  - Tasks with priority, relative timing, duration, and dependencies
+  - Timeline/milestones
+  - Recommendations and optional ideas
+  - Template-specific modules
+  - Warnings and missing information
+- Require the model to state assumptions and distinguish estimates from verified quotations.
+- Never let the model invent real vendor availability, verified market prices, legal permissions, or confirmed bookings.
+- Implement event-aware planning for the five initial templates.
+- Implement custom-event classification/proposal with sensible fallback behavior when classification is uncertain.
+- Make module visibility data-driven from the template and validated plan.
+- Use application code for totals, currency handling, date calculations, dependency checks, and constraint enforcement.
+- Implement budget validation and warn if category totals do not match the total budget or exceed it.
+- Implement timeline validation for missing dates, impossible deadlines, and dependencies.
+- Implement plan revision so users can request changes to relevant sections without unintentionally replacing unrelated saved information.
+- Preserve the previous valid plan if the provider fails or returns invalid data.
+- Add provider timeouts, bounded retries, rate limits, and clear failure messages.
+- Add tests with mocked provider responses for valid JSON, malformed JSON, provider timeout, budget overrun, missing fields, and plan revisions.
+
+Suggested generation API:
+- POST /api/v1/events/:eventId/plans/generate
+- POST /api/v1/events/:eventId/plans/:planId/revise
+- GET /api/v1/events/:eventId/plans/:planId
+
+Example output shape (illustrative only; define and enforce the real schema in code):
+{
+  "eventType": "college_hackathon",
+  "summary": "A 24-hour student hackathon",
+  "assumptions": [],
+  "budget": {
+    "currency": "INR",
+    "totalMinorUnits": 8000000,
+    "categories": [
+      {
+        "name": "Catering",
+        "estimatedMinorUnits": 2500000,
+        "estimateStatus": "unverified_estimate"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "title": "Confirm venue access",
+      "priority": "high",
+      "daysBeforeEvent": 21,
+      "dependencies": []
+    }
+  ],
+  "timeline": [],
+  "recommendations": [],
+  "modules": ["registrations", "teams", "judges", "sessions", "equipment"],
+  "warnings": []
+}
+
+Phase 3 deliverables:
+- Working server-side LLM integration.
+- Template-aware structured plan generation.
+- Validation and bounded recovery logic.
+- Persisted plan versions.
+- Budget, timeline, and task outputs displayed in the UI.
+- Automated tests for both success and failure cases.
+
+Phase 3 acceptance:
+- Different event types produce meaningfully different modules and tasks.
+- AI responses are schema-validated before saving.
+- Budget totals and date logic are computed by code, not trusted to the LLM.
+- Provider failure does not destroy a previously saved plan.
+- API keys remain server-side.
+- Tests demonstrate handling of malformed output and constraint violations.
+
+PHASE 4 — INTEGRATION, QUALITY, SECURITY, AND DEPLOYMENT
+
+Purpose:
+Make the complete project coherent, tested, accessible, reliable, and demo-ready.
+
+Expected work:
+- Complete end-to-end flows from event creation through plan generation, editing, task tracking, budget updates, and plan revision.
+- Remove temporary mock data from flows that now use real APIs.
+- Add clear empty, loading, retry, validation, and provider-error states.
+- Polish the dashboard, charts, task views, timeline, and template-specific modules.
+- Ensure the interface is responsive on desktop, tablet, and mobile.
+- Audit keyboard navigation, form labels, focus visibility, semantic structure, and contrast.
+- Review authentication, authorization, input validation, rate limits, CORS, secret handling, and logging.
+- Add tests for core services, API routes, AI validation, and important user journeys.
+- Run lint, type checking, unit tests, integration tests, and production builds; fix failures rather than suppressing them.
+- Add sample/demo data that is clearly identified and contains no real personal information.
+- Add deployment configuration for the chosen hosting platforms.
+- Update `.env.example`, README, setup instructions, API documentation, architecture notes, and known limitations.
+- Prepare a repeatable demo scenario for at least three event categories.
+- Document any incomplete feature honestly.
+
+Phase 4 deliverables:
+- Integrated, deployable application.
+- Passing automated checks that are actually configured and run.
+- Security and accessibility review checklist.
+- README with local setup, environment variables, testing, deployment, and demo instructions.
+- Demonstration scenarios for wedding, college hackathon, and community event.
+- Known limitations and future improvements.
+
+Phase 4 acceptance:
+- A user can create an event, generate a plan, view it, edit tasks, update the budget, and revise the plan.
+- At least three distinct event categories demonstrate meaningful differences.
+- The application handles invalid inputs and AI failures gracefully.
+- No exposed API keys or known critical authorization flaws.
+- Production build succeeds and documented deployment steps are accurate.
+- No feature is described as complete unless verified.
+
+============================================================
+4. SYSTEM ARCHITECTURE
+============================================================
+
+Recommended architecture:
+- Frontend: Next.js App Router, TypeScript, Tailwind CSS, reusable accessible UI components.
+- Backend: Node.js, Express, TypeScript.
+- Database: MongoDB with a maintained ODM or well-defined repository layer.
+- GenAI: one provider (Gemini or Groq) through a server-side adapter.
+- Validation: Zod or equivalent runtime schemas.
+- Charts: Recharts or equivalent.
+- Testing: Vitest/Jest plus API integration testing and selected end-to-end tests.
+- Hosting: Vercel for frontend; Render or an equivalent Node-compatible host for backend; MongoDB Atlas for persistence.
+
+Architecture flow:
+Browser
+  -> Next.js UI
+  -> Express API
+  -> Authentication / Authorization / Request Validation
+  -> Domain Services
+       -> Event Service
+       -> Template Registry
+       -> Planning Orchestrator
+       -> Budget Service
+       -> Timeline Service
+       -> Task Service
+       -> Report Service
+  -> Repositories
+  -> MongoDB
+
+Planning Orchestrator
+  -> Load event + template
+  -> Prepare constraints
+  -> LLM provider adapter
+  -> Parse structured response
+  -> Schema and business-rule validation
+  -> Deterministic calculations
+  -> Save plan version
+  -> Return normalized result
+
+Start as a modular monolith. Do not introduce microservices, message brokers, vector databases, or agent frameworks unless a demonstrated requirement justifies them.
+
+============================================================
+5. EVENT TEMPLATE DESIGN
+============================================================
+
+A template should be data-driven and versioned. It may contain:
+- id and version
+- display name and description
+- category
+- required and optional fields
+- relevant modules
+- task categories and suggested tasks
+- planning constraints
+- recommended output sections
+- validation rules
+
+Initial template identifiers:
+- wedding
+- birthday
+- college_hackathon
+- community_event
+- corporate_conference
+- custom
+
+Examples of relevant modules:
+Common:
+- overview
+- budget
+- timeline
+- tasks
+- recommendations
+- reports
+
+Optional:
+- guests
+- vendors
+- registrations
+- teams
+- judges
+- speakers
+- sessions
+- volunteers
+- sponsors
+- equipment
+- outreach
+- impact_tracking
+
+Module selection must come from trusted template configuration and validated planning output. The LLM may recommend modules but must not arbitrarily grant permissions or create unsupported functionality.
+
+============================================================
+6. DATA MODEL DETAILS
+============================================================
+
+Suggested collections:
+- users
+- events
+- eventMembers
+- eventTemplates (or version-controlled template files for the MVP)
+- plans
+- tasks
+- budgets
+- expenses
+- resources
+- participants
+- conversations (optional)
+- notifications (optional)
+
+Event:
+- _id
+- ownerId
+- title
+- eventType
+- templateId
+- templateVersion
+- description
+- eventDate / startAt / endAt
+- timezone
+- location object or text
+- currency
+- budgetLimitMinorUnits
+- expectedAttendance
+- preferences
+- status
+- createdAt / updatedAt
+
+Plan:
+- _id
+- eventId
+- version
+- status
+- summary
+- assumptions
+- structuredOutput
+- validationWarnings
+- provider/model metadata where safe
+- createdAt / updatedAt
+
+Task:
+- _id
+- eventId
+- title
+- description
+- category
+- status
+- priority
+- dueAt
+- estimatedDuration
+- dependencyIds
+- assigneeId (optional)
+- source (template / AI / user)
+- createdAt / updatedAt
+
+Budget:
+- eventId
+- currency
+- plannedTotalMinorUnits
+- categoryAllocations
+- updatedAt
+
+Expense:
+- eventId
+- category
+- amountMinorUnits
+- currency
+- status (estimate / quotation / actual)
+- vendorName (optional)
+- date
+- notes
+
+Data rules:
+- Use integer minor units for monetary values when practical and always store currency explicitly.
+- Store timestamps consistently; display them in the event's configured timezone.
+- Never treat unknown cost as zero.
+- Distinguish estimated costs from verified quotes and actual spending.
+- Validate references and ownership.
+- Add indexes for event owner/date, tasks by event/due date, and membership by event/user.
+- Avoid embedding unbounded arrays in event documents.
+- Use plan versioning for revisions.
+
+============================================================
+7. AI DESIGN RULES
+============================================================
+
+The LLM is responsible for:
+- Understanding natural-language requirements.
+- Proposing suitable plan content.
+- Generating task descriptions and recommendations.
+- Suggesting budget categories and estimated allocations.
+- Suggesting preparation milestones and event-day activities.
+- Proposing changes in response to user requests.
+
+Application code is responsible for:
+- Authentication and authorization.
+- Input validation.
+- Currency and total calculations.
+- Date arithmetic and timezone handling.
+- Task dependency validation.
+- Budget constraints and warnings.
+- Stable identifiers and database writes.
+- Permission checks and external side effects.
+
+AI prompt construction should:
+- Include only relevant event context and template instructions.
+- Specify a strict output schema.
+- Require explicit assumptions and warnings.
+- Tell the model not to invent verified vendor prices, bookings, legal approvals, or availability.
+- Treat user text and retrieved content as untrusted data.
+- Request concise, actionable output.
+- Avoid sending unnecessary personal data to the provider.
+
+AI failure handling:
+- Set a request timeout.
+- Limit retries.
+- Validate the provider response.
+- Preserve existing valid data on failure.
+- Show an actionable error to the user.
+- Avoid duplicate plan creation on retry; use request identifiers or idempotency where appropriate.
+
+RAG is not required for the MVP. Add retrieval only when trusted documents or verified external information materially improve planning.
+
+============================================================
+8. SECURITY, PRIVACY, AND ACCESSIBILITY
+============================================================
+
+Security:
+- Store secrets in environment variables or a secret manager.
+- Commit only `.env.example`, never `.env`.
+- Validate and sanitize input at the server boundary.
+- Apply event-level authorization.
+- Use secure authentication and session/token handling.
+- Restrict CORS to intended origins in production.
+- Apply rate limits to AI generation and other sensitive endpoints.
+- Do not log API keys, tokens, or unnecessary personal data.
+- Avoid unsafe rendering of model-generated HTML.
+- Treat generated output as untrusted until validated.
+- Add safe deletion and retention behavior appropriate to the deployed product.
+
+Accessibility:
+- Use semantic headings, forms, buttons, and landmarks.
+- Label all form fields.
+- Provide visible keyboard focus.
+- Support keyboard-only navigation.
+- Maintain adequate text/background contrast.
+- Do not communicate status through color alone.
+- Use accessible names and chart summaries.
+- Make layouts usable on mobile and at browser zoom.
+
+============================================================
+9. TESTING PLAN
+============================================================
+
+Unit tests:
+- Budget totals and variance
+- Date calculations and timezone cases
+- Template selection
+- Schema validation
+- Task dependencies
+- Plan revision merge behavior
+
+API tests:
+- Event creation, update, retrieval, and deletion/archive
+- Task status changes
+- Budget update and expense creation
+- Invalid request handling
+- Missing event handling
+- Authorization boundaries
+
+AI tests with mocked provider responses:
+- Valid structured output
+- Malformed JSON
+- Missing required fields
+- Budget allocations exceeding the limit
+- Missing assumptions
+- Provider timeout and rate limit
+- Empty or refused response
+- Revision that should preserve unrelated plan sections
+
+End-to-end scenarios:
+1. Create a birthday event and generate a plan.
+2. Create a college hackathon and verify registrations, teams, sessions, and equipment modules.
+3. Create a community cleanup and verify volunteers, resources, outreach, and safety tasks.
+4. Change the budget and verify recalculation.
+5. Change the event date and verify affected deadlines.
+6. Refresh the page and verify persisted data.
+7. Simulate an AI failure and verify that the previous plan remains accessible.
+
+Do not fabricate test results. Record which commands were executed and whether they passed.
+
+============================================================
+10. UI/UX REQUIREMENTS
+============================================================
+
+Design direction:
+- Modern, polished, trustworthy SaaS dashboard.
+- Clear visual hierarchy and restrained color use.
+- Consistent spacing, typography, cards, tables, and form controls.
+- Responsive desktop and mobile layouts.
+- Avoid clutter and unnecessary animations.
+- Use meaningful loading skeletons and empty states.
+- Make the main call to action obvious.
+
+Main pages:
+1. Home dashboard
+2. My Events
+3. Create Event wizard
+4. Event overview
+5. AI planning workspace
+6. Budget and expenses
+7. Tasks and timeline
+8. People/resources (conditional)
+9. Reports/export
+10. Settings
+
+The same core pages should adapt to event templates. Do not duplicate pages for every category.
+
+============================================================
+11. DEPLOYMENT AND ENVIRONMENT
+============================================================
+
+Suggested environment variable names (placeholders only):
+- MONGODB_URI=
+- LLM_PROVIDER=
+- GEMINI_API_KEY=
+- GROQ_API_KEY=
+- SESSION_SECRET= or the required auth configuration
+- FRONTEND_ORIGIN=
+- NEXT_PUBLIC_API_BASE_URL=
+
+Only configure the variables required by the selected implementation. Do not expose server secrets through `NEXT_PUBLIC_*` variables. Never put actual secrets in source files, screenshots, documentation, or Git history.
+
+Deployment checklist:
+- Configure environment variables separately for development and production.
+- Use a production database and restrict its network access appropriately.
+- Configure frontend/backend origins and CORS.
+- Verify health endpoint and logs.
+- Run production build and tests.
+- Verify AI generation from the deployed frontend.
+- Verify data persistence.
+- Verify invalid input and provider failure behavior.
+- Document deployment and rollback limitations.
+
+============================================================
+12. DEMO SCRIPT
+============================================================
+
+Demo A — Wedding:
+- Enter date, guest count, location, budget, and preferences.
+- Generate a wedding plan.
+- Show guests/vendors modules, budget categories, and preparation timeline.
+- Reduce the budget and show a proposed adjustment.
+
+Demo B — College hackathon:
+- Enter attendance, duration, budget, and objectives.
+- Generate the plan.
+- Show registration, teams, judges, sessions, equipment, and prize tasks.
+- Change the date and demonstrate timeline recalculation.
+
+Demo C — Community cleanup:
+- Enter the goal, area, attendance, budget, and date.
+- Generate the plan.
+- Show volunteer assignments, equipment, outreach, safety tasks, and impact measures.
+
+The demo should make clear which outputs are AI-generated, which figures are estimates, and which values are calculated or validated by the application.
+
+============================================================
+13. NON-GOALS FOR THE INITIAL MVP
+============================================================
+
+Do not make these prerequisites for the first working version:
+- Live vendor booking and payment processing
+- Guaranteed live vendor availability or market prices
+- Full CRM functionality
+- Complex multi-agent systems
+- Vector database and RAG before there is a real retrieval need
+- Microservices and distributed infrastructure
+- Native mobile apps
+- Automated external messages without user confirmation
+- Advanced analytics without sufficient stored data
+
+These may be future extensions if justified by user needs and available time.
+
+============================================================
+14. IMPLEMENTATION WORKFLOW FOR ANTIGRAVITY
+============================================================
+
+At the start of each phase:
+1. Inspect the repository and current implementation.
+2. Read README, package files, environment examples, and existing tests.
+3. Summarize what exists and identify gaps against the phase requirements.
+4. Make a short implementation plan before editing.
+5. Preserve working functionality and conventions unless a change is necessary.
+6. Implement in small, coherent steps.
+7. Run available linting, type checking, tests, and builds.
+8. Fix failures caused by the changes.
+9. Summarize files changed, functionality delivered, commands run, test results, environment variables required, and known issues.
+10. Do not claim completion for work that was not executed or verified.
+
+General constraints:
+- Do not rewrite the entire repository without first inspecting it.
+- Do not invent APIs, environment variables, or dependency versions without checking the project.
+- Do not hardcode credentials or real personal data.
+- Do not suppress errors or disable tests merely to get a green result.
+- Do not add unnecessary dependencies.
+- Do not build features outside the current phase unless required for integration.
+- Keep the application runnable after each phase.
+- If a required credential is unavailable, implement a safe configuration path and clearly document how to supply it; do not pretend the external integration was tested.
+- Prefer simple, maintainable solutions over speculative complexity.
+- When a requirement is ambiguous, choose the simplest safe interpretation and document it rather than blocking on minor details.
+
+============================================================
+15. FINAL DEFINITION OF DONE
+============================================================
+
+The MVP is considered complete only when:
+- The frontend and backend run using documented commands.
+- A user can create and persist events.
+- At least five event templates and a custom-event flow are available.
+- AI generates structured, event-aware plans using a configured provider.
+- Output is validated before persistence.
+- Budget calculations and timeline logic are performed and checked by application code.
+- Users can view plans, edit tasks, track progress, update budgets, and request plan revisions.
+- At least three different event categories have been tested end-to-end.
+- API errors and AI failures are handled without destroying valid data.
+- Secrets are not exposed in frontend code or repository files.
+- Core security and accessibility checks are completed.
+- Automated test and build results are documented honestly.
+- README includes setup, environment configuration, testing, deployment, and limitations.
+
+END OF SPECIFICATION

@@ -1,0 +1,145 @@
+{
+  "id": "wedding",
+  "version": "1.0.0",
+  "name": "Wedding & Anniversary",
+  "category": "personal_celebration",
+  "description": "Comprehensive planning for sacred ceremonies, banquets, and reception celebrations.",
+  "icon": "HeartHandshake",
+  "requiredFields": [
+    "title",
+    "startDate",
+    "location",
+    "budgetLimitMinorUnits",
+    "currency",
+    "expectedAttendance"
+  ],
+  "optionalFields": [
+    "description",
+    "endDate",
+    "preferences.ceremonyStyle",
+    "preferences.cateringType",
+    "preferences.bridalPartyCount",
+    "preferences.colorPalette"
+  ],
+  "customFields": [
+    {
+      "name": "ceremonyStyle",
+      "label": "Ceremony Style / Tradition",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "Traditional Religious", "value": "traditional_religious" },
+        { "label": "Modern Civil / Secular", "value": "civil_secular" },
+        { "label": "Interfaith / Multi-Cultural", "value": "interfaith" },
+        { "label": "Destination / Outdoor", "value": "destination" }
+      ],
+      "defaultValue": "traditional_religious",
+      "helperText": "Informs ceremony etiquette and timeline milestones."
+    },
+    {
+      "name": "cateringType",
+      "label": "Catering Service Style",
+      "type": "select",
+      "required": false,
+      "options": [
+        { "label": "Plated Multi-Course Dinner", "value": "plated" },
+        { "label": "Grand Buffet", "value": "buffet" },
+        { "label": "Cocktail & Heavy Hors d'oeuvres", "value": "cocktail" },
+        { "label": "Family Style Feast", "value": "family_style" }
+      ],
+      "defaultValue": "plated"
+    },
+    {
+      "name": "bridalPartyCount",
+      "label": "Wedding Party Size (Attendants)",
+      "type": "number",
+      "required": false,
+      "defaultValue": 8,
+      "helperText": "Total bridesmaids, groomsmen, and attendants."
+    }
+  ],
+  "defaultModules": [
+    "overview",
+    "budget",
+    "timeline",
+    "tasks",
+    "recommendations",
+    "reports",
+    "guests",
+    "vendors",
+    "catering"
+  ],
+  "taskCategories": [
+    "Venue & Logistics",
+    "Attire & Beauty",
+    "Catering & Bar",
+    "Photography & Video",
+    "Music & Entertainment",
+    "Stationery & Invitations",
+    "Ceremony Details",
+    "Legal & Marriage Licensing"
+  ],
+  "suggestedTasks": [
+    {
+      "title": "Secure Ceremony & Reception Venues",
+      "category": "Venue & Logistics",
+      "daysBeforeEvent": 270,
+      "priority": "critical"
+    },
+    {
+      "title": "Book Wedding Photographer & Videographer",
+      "category": "Photography & Video",
+      "daysBeforeEvent": 240,
+      "priority": "high"
+    },
+    {
+      "title": "Send Save-the-Date Announcements",
+      "category": "Stationery & Invitations",
+      "daysBeforeEvent": 180,
+      "priority": "high"
+    },
+    {
+      "title": "Finalize Catering Menu & Tasting Session",
+      "category": "Catering & Bar",
+      "daysBeforeEvent": 90,
+      "priority": "high"
+    },
+    {
+      "title": "Apply for Marriage License with County Clerk",
+      "category": "Legal & Marriage Licensing",
+      "daysBeforeEvent": 30,
+      "priority": "critical"
+    },
+    {
+      "title": "Conduct Wedding Rehearsal & Walkthrough",
+      "category": "Ceremony Details",
+      "daysBeforeEvent": 1,
+      "priority": "high"
+    }
+  ],
+  "planningRules": {
+    "recommendedLeadTimeDays": 270,
+    "budgetAllocationGuidance": {
+      "Venue & Catering": 45,
+      "Photography & Video": 12,
+      "Attire & Beauty": 10,
+      "Decorations & Floral": 10,
+      "Music & Entertainment": 8,
+      "Invitations & Stationery": 3,
+      "Wedding Planner / Coordination": 7,
+      "Contingency Reserve": 5
+    }
+  },
+  "outputSections": [
+    "summary",
+    "themeAndConcept",
+    "assumptions",
+    "warnings",
+    "budgetProposal",
+    "tasks",
+    "timelineMilestones",
+    "eventDaySchedule",
+    "templateSpecificModules",
+    "recommendations"
+  ]
+}
